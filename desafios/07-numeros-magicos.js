@@ -1,4 +1,5 @@
 // Números Mágicos
+
 const INTERVAL_THIRTY_MINUTES = 60 * 30 * 1000;
 
 function lookForUpdades() {

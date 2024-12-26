@@ -1,4 +1,5 @@
 // Causa vs Efeito
+
 import { useEffect, useState } from "react";
 
 interface User {

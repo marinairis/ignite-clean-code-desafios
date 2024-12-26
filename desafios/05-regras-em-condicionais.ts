@@ -1,3 +1,5 @@
+// Regras em condicionais
+
 const necessaryGradeToBeApproved = 7;
 const studentGrade = 10;
 

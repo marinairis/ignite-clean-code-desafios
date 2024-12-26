@@ -1,3 +1,5 @@
+// Documentação vs Comentários
+
 async function register(data) {
   const { email, name, avatar } = data;
 
