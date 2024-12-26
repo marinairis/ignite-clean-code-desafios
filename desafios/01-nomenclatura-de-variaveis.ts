@@ -1,55 +1,65 @@
 // Nomenclatura de variáveis
 
-const list = [
+const categoryList = [
   {
-    title: 'User',
-    followers: 5
+    title: "User",
+    followers: 5,
   },
   {
-    title: 'Friendly',
+    title: "Friendly",
     followers: 50,
   },
   {
-    title: 'Famous',
+    title: "Famous",
     followers: 500,
   },
   {
-    title: 'Super Star',
+    title: "Super Star",
     followers: 1000,
   },
-]
+];
 
-export default async function getData(req, res) {
-  const github = String(req.query.username)
+const API_BAD_REQUEST = 400;
+const API_NOT_FOUND = 404;
 
-  if (!github) {
-    return res.status(400).json({
-      message: `Please provide an username to search on the github API`
-    })
+export default async function getUserCategoty(request, response) {
+  const userName = String(request.query.username);
+
+  if (!userName) {
+    return response.status(API_BAD_REQUEST).json({
+      message: `Please provide an username to search on the github API`,
+    });
   }
 
-  const response = await fetch(`https://api.github.com/users/${github}`);
+  const githubApi = await fetch(`https://api.github.com/users/${userName}`);
 
-  if (response.status === 404) {
-    return res.status(400).json({
-      message: `User with username "${github}" not found`
-    })
+  if (githubApi.status === API_NOT_FOUND) {
+    return response.status(API_BAD_REQUEST).json({
+      message: `User with username "${userName}" not found`,
+    });
   }
 
-  const data = await response.json()
+  const data = await githubApi.json();
 
-  const orderList = list.sort((a, b) =>  b.followers - a.followers); 
+  const categoryOrderList = categoryList.sort(
+    (a, b) => b.followers - a.followers
+  );
 
-  const category = orderList.find(i => data.followers > i.followers)
+  const category = categoryOrderList.find((i) => data.followers > i.followers);
 
   const result = {
-    github,
-    category: category.title
-  }
+    userName,
+    category: category.title,
+  };
 
-  return result
+  return result;
 }
 
-getData({ query: {
-  username: 'josepholiveira'
-}}, {})
+getUserCategoty(
+  {
+    query: {
+      username: "josepholiveira",
+    },
+  },
+  {}
+);

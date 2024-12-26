@@ -1,5 +1,5 @@
 // Causa vs Efeito
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 
 interface User {
   name: string;
@@ -10,41 +10,40 @@ function fetchUser() {
   return {
     data: {
       user: {
-        name: 'Joseph Oliveira',
-        github: 'https://github.com/josepholiveira'
-      }
-    }
-  }
+        name: "Joseph Oliveira",
+        github: "https://github.com/josepholiveira",
+      },
+    },
+  };
 }
 
 export function UserProfile() {
-  const [shouldNotRenderUserName, setShouldNotRenderUserName] = useState(false)
-  const [userData, setUserData] = useState<User>()
+  const [isLoading, setIsLoading] = useState(false);
+  const [user, setUser] = useState<User>();
 
   useEffect(() => {
     function loadUser() {
-      setShouldNotRenderUserName(true)
+      setIsLoading(true);
 
-      const fetchUserResponse = fetchUser()
+      const response = fetchUser();
+      setUser(response.data.user);
 
-      setUserData(fetchUserResponse.data.user)
-      
-      setShouldNotRenderUserName(false)
+      setIsLoading(false);
     }
 
-    loadUser()
-  })
+    loadUser();
+  }, []);
 
-  if (shouldNotRenderUserName) {
-    return <p>Loading...</p>
+  if (isLoading) {
+    return <p>Loading...</p>;
   }
 
   return (
     <div>
-      <img src={`${userData?.github}.png`} alt="" />
-      <a href={userData?.github}>{userData?.name}</a>
+      <img src={`${user?.github}.png`} alt={`${user?.name}'s avatar`} />
+      <a href={user?.github} target="_blank" rel="noopener noreferrer">
+        {user?.name}
+      </a>
     </div>
-  )
+  );
 }
-
-
